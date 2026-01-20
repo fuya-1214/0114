@@ -1,0 +1,58 @@
+﻿#pragma once
+#include <Siv3D.hpp>
+
+class Hp
+{
+public:
+	struct Style
+	{
+		ColorF background{ 0.0, 0.6 };
+		ColorF delay{ 0.9, 0.8, 0.3 };
+		ColorF hpColor{ 0.8, 0.2, 0.2 };
+		ColorF frameColor{ 0.1 };
+		double frame = 1.5f;
+	};
+
+	Hp() noexcept;
+	void Update();
+	void Draw() const;
+	void Damage(int32 damage);
+
+private:
+	Effect effect;
+	
+	double getHPRation() const; // 割合の計算
+	double getDelayHPRation() const;
+	bool isDead();
+
+	RoundRect m_rect{ 300, 500, 930, 170, 20 };
+	const Font fontBit{ 36 };
+	const Font fontHp{ 20 };
+
+	int32 maxHP = 400;
+	int32 m_maxHP;
+	int32 m_currentHP;
+	double m_delayHP;
+	double m_delayVelocity = 0.0;
+};
+
+struct DamegeEffect : IEffect
+{
+	Vec2 m_start;
+	int32 m_damege;
+	Font m_font;
+
+	DamegeEffect(const Vec2& start, int32 damege, const Font& font)
+		: m_start(start)
+		, m_damege(damege)
+		, m_font(font) {}
+
+	bool update(double time) override
+	{
+		const HSV color{ (180 - m_damege * 1.8), (1.0 - (time * 2.0)) };
+
+		m_font(m_damege).drawAt(TextStyle::Outline(0.2, ColorF{ 0.0, color.a }), 60, m_start.moveBy(0, time * -10), color);
+
+		return (time < 0.5);
+	}
+};
