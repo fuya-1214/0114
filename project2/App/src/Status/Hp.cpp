@@ -13,6 +13,19 @@ void Hp::Update()
 	m_delayHP = Math::SmoothDamp(m_delayHP, m_currentHP, m_delayVelocity, smoothTimeSec);
 
 	effect.update();
+	deltaTime = Scene::DeltaTime();
+	if (enemyAttack)
+	{
+		accumulatedTime += deltaTime;
+	}
+
+	if (interval < accumulatedTime)
+	{
+		PlayerDamage(90);
+
+		accumulatedTime = 0;
+		enemyAttack = false;
+	}
 
 }
 
@@ -51,11 +64,17 @@ double Hp::getDelayHPRation() const
 	return m_maxHP > 0 ? (m_delayHP / m_maxHP) : 0.0;
 }
 
-void Hp::Damage(int32 damage)
+void Hp::EnemyDamage(int32 damage)
+{
+	effect.add<DamegeEffect>(enemy, damage, fontBit);
+}
+
+void Hp::PlayerDamage(int32 damage)
 {
 	m_currentHP = Max(0, m_currentHP - damage);
 
-	effect.add<DamegeEffect>(Cursor::Pos(), damage, fontBit);
+	effect.add<DamegeEffect>(player, damage, fontBit);
+
 }
 
 bool Hp::isDead()

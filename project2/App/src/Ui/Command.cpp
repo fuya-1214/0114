@@ -12,7 +12,8 @@ void Command::Update()
 
 		if (MouseL.down())
 		{
-			hp.Damage(90);
+			hp.EnemyDamage(90);
+			hp.enemyAttack = true;
 		}
 	}
 
@@ -22,7 +23,8 @@ void Command::Update()
 
 		if (MouseL.down())
 		{
-			hp.Damage(200);
+			hp.EnemyDamage(200);
+			//hp.enemyAttack = true;
 		}
 	}
 

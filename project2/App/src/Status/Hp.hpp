@@ -16,7 +16,10 @@ public:
 	Hp() noexcept;
 	void Update();
 	void Draw() const;
-	void Damage(int32 damage);
+	void EnemyDamage(int32 damage);	  // 敵へのダメージ
+	void PlayerDamage(int32 damage);  // プレイヤーへのダメージ
+	 
+	bool enemyAttack = false;
 
 private:
 	Effect effect;
@@ -34,6 +37,14 @@ private:
 	int32 m_currentHP;
 	double m_delayHP;
 	double m_delayVelocity = 0.0;
+
+	Vec2 enemy = Vec2{ 800, 300 }; // 後から消す
+	Vec2 player = Vec2{ 400, 300 };// 後から消す
+
+	double deltaTime;
+	const double interval = 1.5;
+	double accumulatedTime = 0.0;
+
 };
 
 struct DamegeEffect : IEffect
@@ -55,4 +66,5 @@ struct DamegeEffect : IEffect
 
 		return (time < 0.5);
 	}
+
 };
