@@ -45,6 +45,18 @@ private:
 	const double interval = 1.5;
 	double accumulatedTime = 0.0;
 
+	const PixelShader ps;
+	double vignetteAlpha = 0.3;
+	Image vignetteImage{ Scene::Size(), ColorF{ 178 / 255.0, 34 / 255.0, 34 / 255.0 } };
+	const Texture vignetteTexture{ vignetteImage };
+	bool isVignette = false;
+
+	double vignetteTime = 0.0;
+
+	const double vignetteFadeIn = 0.1;   // フェードイン時間
+	const double vignetteHold = 0.1;   // 最大保持
+	const double vignetteFadeOut = 0.3;  // フェードアウト時間
+
 };
 
 struct DamegeEffect : IEffect
