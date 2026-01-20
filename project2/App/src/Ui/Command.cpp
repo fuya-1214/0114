@@ -16,6 +16,7 @@ void Command::Update()
 		{
 			hp.EnemyDamage(90);
 			hp.enemyAttack = true;
+
 			attackFlag = true;
 		}
 	}
@@ -27,11 +28,13 @@ void Command::Update()
 		if (MouseL.down())
 		{
 			hp.EnemyDamage(200);
+
 			attackFlag1 = true;
 			//hp.enemyAttack = true;
 		}
 	}
 
+	// 攻撃アニメーションの更新
 	if (attackFlag)
 	{
 		i += Scene::DeltaTime() * 20;
@@ -76,6 +79,8 @@ void Command::Draw() const
 	}
 
 	hp.Draw();
+
+	// 攻撃のアニメーション
 	if (attackFlag)
 	{
 		attackTexture(240 * static_cast<int>(i), 0, 240, 240).drawAt(Vec2{ 1280 / 2 , 250});

@@ -45,13 +45,14 @@ private:
 	const double interval = 1.5;
 	double accumulatedTime = 0.0;
 
-	const PixelShader ps;
-	double vignetteAlpha = 0.3;
-	Image vignetteImage{ Scene::Size(), ColorF{ 178 / 255.0, 34 / 255.0, 34 / 255.0 } };
-	const Texture vignetteTexture{ vignetteImage };
-	bool isVignette = false;
+	// ビネットエフェクト用
+	const PixelShader ps; // ピクセルシェーダー
+	double vignetteAlpha = 0.3; // ビネットの最大アルファ値
+	Image vignetteImage{ Scene::Size(), ColorF{ 178 / 255.0, 34 / 255.0, 34 / 255.0 } }; // ビネット用画像
+	const Texture vignetteTexture{ vignetteImage };	// ビネット用テクスチャ
+	bool isVignette = false; // ビネットエフェクトの有効フラグ
 
-	double vignetteTime = 0.0;
+	double vignetteTime = 0.0; // ビネットエフェクトの経過時間
 
 	const double vignetteFadeIn = 0.1;   // フェードイン時間
 	const double vignetteHold = 0.1;   // 最大保持
