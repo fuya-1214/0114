@@ -19,7 +19,9 @@ void Hp::Update()
 	m_delayHP = Math::SmoothDamp(m_delayHP, m_currentHP, m_delayVelocity, smoothTimeSec);
 
 	effect.update();
+
 	deltaTime = Scene::DeltaTime();
+
 	if (enemyAttack)
 	{
 		accumulatedTime += deltaTime;
@@ -33,6 +35,8 @@ void Hp::Update()
 		enemyAttack = false;
 		
 	}
+
+	// ダメージエフェクトの更新
 	if (isVignette)
 	{
 		vignetteTime += deltaTime;
@@ -90,6 +94,7 @@ void Hp::Draw() const
 	fontHp(U"HP").draw(Vec2{ 550, 500 }, ColorF{ 0.2 });
 	fontHp(ThousandsSeparate(m_currentHP)).draw(Vec2{ 830, 500 }, ColorF{ 0.2 });
 
+	// ダメージエフェクトの描画
 	if (isVignette)
 	{
 		{
@@ -97,8 +102,6 @@ void Hp::Draw() const
 			vignetteTexture.draw(ColorF{ 0.6, 0.0, 0.0, vignetteAlpha });
 		}
 	}
-	Print << vignetteAlpha;
-	
 }
 
 double Hp::getHPRation() const

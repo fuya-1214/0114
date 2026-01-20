@@ -19,9 +19,10 @@ private:
 
 	const Font font{ 28 };
 
+	// 攻撃
 	bool attackFlag = false;
 	const Texture attackTexture;
-
+	// 必殺技
 	bool attackFlag1 = false;
 	const Texture attackTexture1;
 	double i = 0;
