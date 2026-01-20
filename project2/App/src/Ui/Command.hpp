@@ -19,4 +19,11 @@ private:
 
 	const Font font{ 28 };
 
+	bool attackFlag = false;
+	const Texture attackTexture;
+
+	bool attackFlag1 = false;
+	const Texture attackTexture1;
+	double i = 0;
+
 };

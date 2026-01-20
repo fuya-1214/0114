@@ -1,10 +1,16 @@
 ﻿#include "Hp.hpp"
+#
 
 Hp::Hp() noexcept
 	: m_maxHP{ maxHP }
 	, m_currentHP{ maxHP }
 	, m_delayHP{ static_cast<double>(maxHP)}
+	, ps{ HLSL{ U"shaders/vignette.hlsl", U"main" } }
 {
+	if (!ps)
+	{
+		throw Error{ U"Error" };
+	}
 }
 
 void Hp::Update()
@@ -25,6 +31,37 @@ void Hp::Update()
 
 		accumulatedTime = 0;
 		enemyAttack = false;
+		
+	}
+	if (isVignette)
+	{
+		vignetteTime += deltaTime;
+
+		const double t = vignetteTime;
+
+		if (t < vignetteFadeIn)
+		{
+			// フェードイン
+			vignetteAlpha = Math::Lerp(0.0, 0.4, t / vignetteFadeIn);
+		}
+		else if (t < vignetteFadeIn + vignetteHold)
+		{
+			// 最大
+			vignetteAlpha = 0.4;
+		}
+		else if (t < vignetteFadeIn + vignetteHold + vignetteFadeOut)
+		{
+			// フェードアウト
+			const double outT =
+				(t - vignetteFadeIn - vignetteHold) / vignetteFadeOut;
+			vignetteAlpha = Math::Lerp(0.4, 0.0, outT);
+		}
+		else
+		{
+			// 終了
+			vignetteAlpha = 0.0;
+			isVignette = false;
+		}
 	}
 
 }
@@ -52,6 +89,16 @@ void Hp::Draw() const
 	fontBit(U"プレイヤー").draw(Vec2{ 330, 500 }, ColorF{ 0.2 });
 	fontHp(U"HP").draw(Vec2{ 550, 500 }, ColorF{ 0.2 });
 	fontHp(ThousandsSeparate(m_currentHP)).draw(Vec2{ 830, 500 }, ColorF{ 0.2 });
+
+	if (isVignette)
+	{
+		{
+			const ScopedCustomShader2D shader{ ps };
+			vignetteTexture.draw(ColorF{ 0.6, 0.0, 0.0, vignetteAlpha });
+		}
+	}
+	Print << vignetteAlpha;
+	
 }
 
 double Hp::getHPRation() const
@@ -75,6 +122,8 @@ void Hp::PlayerDamage(int32 damage)
 
 	effect.add<DamegeEffect>(player, damage, fontBit);
 
+	isVignette = true;
+	vignetteTime = 0.0;
 }
 
 bool Hp::isDead()

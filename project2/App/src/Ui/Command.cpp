@@ -1,6 +1,8 @@
 ﻿#include "Command.hpp"
 
 Command::Command()
+	: attackTexture{ U"assets/attack.png" }
+	, attackTexture1{ U"assets/attack1.png" }
 {
 }
 
@@ -14,6 +16,7 @@ void Command::Update()
 		{
 			hp.EnemyDamage(90);
 			hp.enemyAttack = true;
+			attackFlag = true;
 		}
 	}
 
@@ -24,7 +27,27 @@ void Command::Update()
 		if (MouseL.down())
 		{
 			hp.EnemyDamage(200);
+			attackFlag1 = true;
 			//hp.enemyAttack = true;
+		}
+	}
+
+	if (attackFlag)
+	{
+		i += Scene::DeltaTime() * 20;
+		if (i > 8)
+		{
+			i = 0;
+			attackFlag = false;
+		}
+	}
+	else if (attackFlag1)
+	{
+		i += Scene::DeltaTime() * 20;
+		if (i > 26)
+		{
+			i = 0;
+			attackFlag1 = false;
 		}
 	}
 
@@ -53,4 +76,13 @@ void Command::Draw() const
 	}
 
 	hp.Draw();
+	if (attackFlag)
+	{
+		attackTexture(240 * static_cast<int>(i), 0, 240, 240).drawAt(Vec2{ 1280 / 2 , 250});
+	}
+
+	if (attackFlag1)
+	{
+		attackTexture1(640 * static_cast<int>(i), 0, 640, 480).drawAt(Vec2{ 1280 / 2 , 250});
+	}
 }
